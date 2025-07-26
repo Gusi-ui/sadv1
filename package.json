@@ -27,5 +27,10 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "@nestjs/swagger": "^11.2.0",
+    "@tailwindcss/postcss": "^4.1.11",
+    "swagger-ui-express": "^5.0.1"
+  }
 }

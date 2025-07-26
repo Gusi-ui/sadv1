@@ -1,0 +1,74 @@
+// schema.prisma
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+} 
+
+model usuario {
+  id                String   @id @default(uuid())
+  nombre            String
+  apellidos         String
+  telefono          String
+  dni               String   @unique
+  direccion         String
+  horasMensuales    Int
+  servicioLaborables Boolean  @default(true)
+  servicioFestivos   Boolean  @default(false)
+  asignaciones      asignacion[]
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model trabajadora {
+  id            String        @id @default(uuid())
+  nombre        String
+  apellidos     String
+  email         String        @unique
+  dni           String        @unique
+  telefono      String
+  activo        Boolean       @default(true)
+  asignaciones  asignacion[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model asignacion {
+  id            String      @id @default(uuid())
+  usuarioId     String
+  trabajadoraId String
+  fechaInicio   DateTime
+  fechaFin      DateTime?
+  planning      planning[]
+  usuario       usuario     @relation(fields: [usuarioId], references: [id])
+  trabajadora   trabajadora @relation(fields: [trabajadoraId], references: [id])
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model planning {
+  id            String      @id @default(uuid())
+  asignacionId  String
+  fecha         DateTime
+  horaInicio    DateTime
+  horaFin       DateTime
+  asignacion    asignacion  @relation(fields: [asignacionId], references: [id])
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+} 
+
+model administrador {
+  id          String   @id @default(uuid())
+  nombre      String
+  apellidos   String
+  email       String   @unique
+  password    String
+  superadmin  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+} 
+
